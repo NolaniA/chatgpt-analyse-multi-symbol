@@ -1,0 +1,9 @@
+{
+  "type_position": "SELL_STOP",
+  "price": 5239.8,
+  "SL": 5250,
+  "TP": 5224.5,
+  "lot": 0.01,
+  "RR": 1.5,
+  "reason": "M15 bear, M1 breakdown"
+}
