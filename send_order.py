@@ -156,27 +156,29 @@ class MT5AutoTrader:
             mt5.ORDER_FILLING_FOK,
             mt5.ORDER_FILLING_RETURN,
         ]
+        try:
+            for mode in filling_modes:
+                request["type_filling"] = mode
 
-        for mode in filling_modes:
-            request["type_filling"] = mode
+                print("Trying filling mode:", mode)
+                print("Request:", request)
 
-            print("Trying filling mode:", mode)
-            print("Request:", request)
+                result = mt5.order_send(request)
 
-            result = mt5.order_send(request)
+                if result is None:
+                    print("order_send returned None:", mt5.last_error())
+                    continue
 
-            if result is None:
-                print("order_send returned None:", mt5.last_error())
-                continue
+                if result.retcode == mt5.TRADE_RETCODE_DONE:
+                    print("Order success")
+                    print("Ticket:", result.order)
+                    return result
 
-            if result.retcode == mt5.TRADE_RETCODE_DONE:
-                print("Order success")
-                print("Ticket:", result.order)
-                return result
+                print("Failed:", result.comment)
+        except  Exception as e:
+            print(f"All filling modes failed: {e}")
+            # raise RuntimeError("All filling modes failed")
 
-            print("Failed:", result.comment)
-
-        raise RuntimeError("All filling modes failed")
 
     # ==============================
     # Main Run
