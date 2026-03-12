@@ -25,7 +25,7 @@ class ChatGPTUploaderConfig:
     page_load_sleep: float = 10.0
     between_actions_sleep: float = 1.0
 
-    wait_done_timeout: int = 6000
+    wait_done_timeout: int = 300
     done_suffix: str = "script=DONE"
 
 
