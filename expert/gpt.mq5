@@ -11,7 +11,7 @@
 CTrade trade;
 
 
-input double PercentTrailing         = 80;
+input double PercentTrailing         = 90;
 input double StartPercentTrailing    = 40;
 input int    OrderHold               = 1;
 
@@ -22,8 +22,8 @@ int OnInit()
   {
 //---
    //--- check market open
-   if(!MarketOpen())
-      return INIT_FAILED;
+   //if(!MarketOpen())
+   //   return INIT_FAILED;
 //---
    return(INIT_SUCCEEDED);
   }
@@ -42,8 +42,8 @@ void OnTick()
   {
 //---
    //---CHECK DATE TIME TRADE
-   if(!IsTradingSession())
-      return;
+   //if(!IsTradingSession())
+   //   return;
       
    TrailingStop();
   }
@@ -66,8 +66,13 @@ void  TrailingStop(double StopLoss = 200)
       double price_bid     = SymbolInfoDouble(ticket_symbol, SYMBOL_BID);
       double Spread        = (price_ask-price_bid);
       
+      if(!MarketOpen(ticket_symbol))
+         continue;
+      
+      
       //---focus position
-      PositionSelectByTicket(ticket);
+      if(!PositionSelectByTicket(ticket))
+         continue;
       
 
       double stop_loss   = PositionGetDouble(POSITION_SL);
@@ -209,9 +214,31 @@ void CheckAndDeleteOldestPending()
     }
 }
 
-bool MarketOpen(string symbol = NULL)
+//bool MarketOpen(string symbol = NULL)
+//{
+//   if (symbol == NULL || symbol == "")
+//      symbol = _Symbol;
+//   return   SymbolInfoInteger(symbol,SYMBOL_TRADE_MODE) != SYMBOL_TRADE_MODE_DISABLED;
+//}
+bool MarketOpen(string symbol="")
 {
-   if (symbol == NULL || symbol == "")
-      symbol = _Symbol;
-   return   SymbolInfoInteger(symbol,SYMBOL_TRADE_MODE) != SYMBOL_TRADE_MODE_DISABLED;
+   if(symbol=="")
+      symbol=_Symbol;
+
+   datetime from,to;
+
+   MqlDateTime tm;
+   TimeToStruct(TimeCurrent(), tm);
+
+   int day = tm.day_of_week;
+
+   if(!SymbolInfoSessionTrade(symbol,(ENUM_DAY_OF_WEEK)day,0,from,to))
+      return false;
+
+   datetime now_sec = TimeCurrent() % 86400;
+
+   if(now_sec < from || now_sec > to)
+      return false;
+
+   return true;
 }
