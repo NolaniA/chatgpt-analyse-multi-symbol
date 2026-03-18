@@ -110,8 +110,11 @@ class ChatGPTUploader:
 
     def upload_file_zip(self):
         folder = Path(self.cfg.data_folder)
-        zip_path = Path("data_zip/data.zip")
+        zip_dir = Path("data_zip")
+        zip_dir.mkdir(exist_ok=True)
     
+        zip_path = zip_dir / "data.zip"
+
         # สร้าง zip
         with zipfile.ZipFile(zip_path, "w") as z:
             for p in folder.iterdir():
