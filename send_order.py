@@ -136,8 +136,12 @@ class MT5AutoTrader:
         if tick_size == 0:
             raise ValueError("Invalid tick size")
         pip_value = tick_value / tick_size
-        lot = round(float(risk_amount / (sl_distance / point * pip_value)), 2)
+        lot = float(risk_amount / (sl_distance / point * pip_value))
         lot = lot*100 if self.symbol.endswith("c") else lot
+        lot = round(lot, 2)
+
+        print(f"lot by calculate: {lot}")
+        print(f"lot by signal: {volume}")
 
         volume = volume if volume <= lot else lot
 
