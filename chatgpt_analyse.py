@@ -113,29 +113,29 @@ class ChatGPTUploader:
         zip_dir = Path("data_zip")
         zip_dir.mkdir(exist_ok=True)
         filename = "data.zip"
-    
+
         zip_path = (zip_dir / filename).resolve()
 
         # สร้าง zip
         with zipfile.ZipFile(zip_path, "w") as z:
             for p in folder.iterdir():
                 if p.is_file():
-                    z.write(p, arcname=p.name)  
-    
+                    z.write(p, arcname=p.name)
+
         # ===== upload แค่ไฟล์เดียว =====
         self._paste("/")
         self._sleep(0.3)
         pyautogui.hotkey("ctrl", "enter")
-        self._sleep(2)
-    
+        self._sleep(1.5)
+
         pyautogui.hotkey("ctrl", "l")
         self._sleep(0.5)
-    
+
         self._paste(str(zip_dir.resolve()))
         self._sleep(0.3)
         pyautogui.hotkey("ctrl", "enter")
         self._sleep(0.7)
-        
+
         pyautogui.hotkey("alt", "n")
         self._sleep(0.3)
 
@@ -143,12 +143,12 @@ class ChatGPTUploader:
         self._sleep(0.2)
         pyautogui.hotkey("ctrl", "enter")
         self._sleep(0.8)
-    
+
         self._sleep(1)
 
-            
 
-    
+
+
 
     def paste_prompt(self):
         prompt = self._read_text(self.cfg.prompt_path)

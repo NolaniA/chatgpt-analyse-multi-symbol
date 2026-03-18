@@ -67,37 +67,37 @@ class MT5AutoTrader:
             print(f"type_position: {type_position}")
 
             # ================= MARKET =================
-            if type_position == "buy" or type_position == "BUY":
+            if type_position == "buy" :
                 order_type = mt5.ORDER_TYPE_BUY
                 price = tick.ask
 
-            elif type_position == "sell" or type_position == "SELL":
+            elif type_position == "sell":
                 order_type = mt5.ORDER_TYPE_SELL
                 price = tick.bid
 
             # ================= PENDING =================
-            elif type_position == "buy_stop" or type_position == "BUY_STOP":
+            elif type_position == "buy_stop" :
                 order_type = mt5.ORDER_TYPE_BUY_STOP
                 action = mt5.TRADE_ACTION_PENDING
                 price = float(signal["price"])
                 if price <= tick.ask:
                     raise ValueError("BUY_STOP must be above ASK")
 
-            elif type_position == "sell_stop" or type_position == "SELL_STOP":
+            elif type_position == "sell_stop" :
                 order_type = mt5.ORDER_TYPE_SELL_STOP
                 action = mt5.TRADE_ACTION_PENDING
                 price = float(signal["price"])
                 if price >= tick.bid:
                     raise ValueError("SELL_STOP must be below BID")
 
-            elif type_position == "buy_limit" or type_position == "BUY_LIMIT":
+            elif type_position == "buy_limit" :
                 order_type = mt5.ORDER_TYPE_BUY_LIMIT
                 action = mt5.TRADE_ACTION_PENDING
                 price = float(signal["price"])
                 if price >= tick.ask:
                     raise ValueError("BUY_LIMIT must be below ASK")
 
-            elif type_position == "sell_limit" or type_position == "SELL_LIMIT":
+            elif type_position == "sell_limit" :
                 order_type = mt5.ORDER_TYPE_SELL_LIMIT
                 action = mt5.TRADE_ACTION_PENDING
                 price = float(signal["price"])
@@ -118,6 +118,42 @@ class MT5AutoTrader:
         sl = round(float(signal["SL"]), digits)
         tp = round(float(signal["TP"]), digits)
         volume = float(signal["lot"])
+
+        # ===== modify volume risk =====
+        RISK_PERCENT = 2.0
+        balance = mt5.account_info().balance
+        risk_amount = balance * (RISK_PERCENT / 100)
+
+        sl_distance = abs(price - sl)
+
+        if sl_distance <= 0:
+            raise ValueError("Invalid SL distance")
+
+        tick_value = info.trade_tick_value
+        tick_size = info.trade_tick_size
+
+        if tick_size == 0:
+            raise ValueError("Invalid tick size")
+        pip_value = tick_value / tick_size
+        lot = risk_amount / (sl_distance / point * pip_value)
+
+        # ===== clamp lot =====
+        min_lot = info.volume_min
+        max_lot = info.volume_max
+        lot_step = info.volume_step
+
+        lot = max(min_lot, min(max_lot, lot))
+        lot = round(lot / lot_step) * lot_step
+
+        # ===== apply cap =====
+        volume = min(volume, lot)
+
+        # ===== normalize final =====
+        volume = max(min_lot, min(max_lot, volume))
+        volume = round(volume / lot_step) * lot_step
+
+
+
 
         # ===== stop distance check =====
         if abs(price - sl) < stop_level:
