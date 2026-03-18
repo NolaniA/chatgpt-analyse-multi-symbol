@@ -41,6 +41,8 @@ Ensure SL/TP follow logical market structure.
 
 Ensure RR >= 1.5 for valid trades.
 
+Ensure lot size using strict risk 1–2% account balance.
+
 Ensure lot size respects balance, leverage, and margin.
 
 Return EXACTLY this JSON structure (fill values if trading, otherwise keep NONE/0):
