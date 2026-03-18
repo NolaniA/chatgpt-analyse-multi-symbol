@@ -84,7 +84,7 @@ class ChatGPTUploader:
             self._paste("/")
             self._sleep(0.3)
             pyautogui.hotkey("ctrl", "enter")
-            self._sleep(1)
+            self._sleep(2)
 
             # focus address bar (file picker path)
             pyautogui.hotkey("ctrl", "l")
