@@ -137,20 +137,22 @@ class MT5AutoTrader:
         pip_value = tick_value / tick_size
         lot = risk_amount / (sl_distance / point * pip_value)
 
+        volume = volume if volume <= lot else lot
+
         # ===== clamp lot =====
-        min_lot = info.volume_min
-        max_lot = info.volume_max
-        lot_step = info.volume_step
+        # min_lot = info.volume_min
+        # max_lot = info.volume_max
+        # lot_step = info.volume_step
 
-        lot = max(min_lot, min(max_lot, lot))
-        lot = round(lot / lot_step) * lot_step
+        # lot = max(min_lot, min(max_lot, lot))
+        # lot = round(lot / lot_step) * lot_step
 
-        # ===== apply cap =====
-        volume = min(volume, lot)
+        # # ===== apply cap =====
+        # volume = min(volume, lot)
 
-        # ===== normalize final =====
-        volume = max(min_lot, min(max_lot, volume))
-        volume = round(volume / lot_step) * lot_step
+        # # ===== normalize final =====
+        # volume = max(min_lot, min(max_lot, volume))
+        # volume = round(volume / lot_step) * lot_step
 
 
 
