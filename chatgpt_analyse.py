@@ -4,6 +4,7 @@ import webbrowser
 from pathlib import Path
 from dataclasses import dataclass
 import shutil
+import zipfile
 
 
 import pyautogui
@@ -107,6 +108,36 @@ class ChatGPTUploader:
 
         self._sleep(1)
 
+    def upload_file_zip(self):
+        folder = Path(self.cfg.data_folder)
+        zip_path = Path("data_zip/data.zip")
+    
+        # สร้าง zip
+        with zipfile.ZipFile(zip_path, "w") as z:
+            for p in folder.iterdir():
+                if p.is_file():
+                    z.write(p, arcname=p.name)  
+    
+        # ===== upload แค่ไฟล์เดียว =====
+        self._paste("/")
+        self._sleep(0.3)
+        pyautogui.hotkey("ctrl", "enter")
+        self._sleep(2)
+    
+        pyautogui.hotkey("ctrl", "l")
+        self._sleep(0.5)
+    
+        self._paste(str(zip_path.resolve()))
+        self._sleep(0.3)
+        pyautogui.hotkey("ctrl", "enter")
+        self._sleep(0.7)
+    
+        self._sleep(1)
+
+            
+
+    
+
     def paste_prompt(self):
         prompt = self._read_text(self.cfg.prompt_path)
 
@@ -205,7 +236,8 @@ class ChatGPTUploader:
         try:
             self.open_project_page()
             self.clear_text_input()
-            self.upload_files_via_add()
+            # self.upload_files_via_add()
+            self.upload_file_zip()
             self.paste_prompt()
             self.open_devtools_console()
             self.allow_console_pasting()
