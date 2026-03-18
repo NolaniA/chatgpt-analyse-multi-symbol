@@ -131,7 +131,7 @@ class ChatGPTUploader:
         pyautogui.hotkey("ctrl", "l")
         self._sleep(0.5)
     
-        self._paste(str(zip_path))
+        self._paste(str(zip_dir.resolve()))
         self._sleep(0.3)
         pyautogui.hotkey("ctrl", "enter")
         self._sleep(0.7)
