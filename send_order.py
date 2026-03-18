@@ -122,9 +122,12 @@ class MT5AutoTrader:
         # ===== modify volume risk =====
         RISK_PERCENT = 2.0
         balance = mt5.account_info().balance
+        print(balance)
         risk_amount = balance * (RISK_PERCENT / 100)
+        print(risk_amount)
 
         sl_distance = abs(price - sl)
+        print(sl_distance)
 
         if sl_distance <= 0:
             raise ValueError("Invalid SL distance")
@@ -135,7 +138,9 @@ class MT5AutoTrader:
         if tick_size == 0:
             raise ValueError("Invalid tick size")
         pip_value = tick_value / tick_size
+        print(pip_value)
         lot = risk_amount / (sl_distance / point * pip_value)
+        print(lot, volume)
 
         volume = volume if volume <= lot else lot
 
