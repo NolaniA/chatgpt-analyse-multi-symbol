@@ -6,8 +6,8 @@ You will receive:
 
 Primary analysis priority:
 - M1 = execution
-- M5 = structure and setup confirmation
-- M15 = directional bias
+- M15 = structure and setup confirmation
+- H1 = directional bias
 
 Your objective:
 Identify only the highest-probability scalping opportunity.
@@ -22,8 +22,8 @@ Trading style:
 - Avoid low-quality trades
 
 Rules:
-- Use M15 only for directional bias
-- Use M5 to define structure, momentum, breakout level, pullback validity
+- Use H1 only for directional bias
+- Use M15 to define structure, momentum, breakout level, pullback validity
 - Use M1 for precise entry trigger
 - Do not trade against strong M15 momentum unless reversal is very clear
 - Avoid ranging, choppy, weak, or low-volume conditions
@@ -39,8 +39,8 @@ Rules:
 
 Decision priority:
 1) Market regime: trend / breakout / pullback / range
-2) M15 directional bias
-3) M5 structure confirmation
+2) H1 directional bias
+3) M15 structure confirmation
 4) M1 execution trigger
 5) Spread check
 6) Risk check
