@@ -45,7 +45,7 @@ void OnTick()
    //---CHECK DATE TIME TRADE
    //if(!IsTradingSession())
    //   return;
-      
+   ClosePositionProfit();
    TrailingStop();
   }
 //+------------------------------------------------------------------+
