@@ -14,6 +14,7 @@ CTrade trade;
 input double PercentTrailing         = 90;
 input double StartPercentTrailing    = 40;
 input int    OrderHold               = 1;
+input int    CloseProfit             = 1;
 
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
@@ -142,6 +143,41 @@ void  TrailingStop(double StopLoss = 200)
       
      }
   }
+
+void ClosePositionProfit(){
+   // signal start
+   if(CloseProfit == 0) return;
+   
+   // check total position
+   if(PositionsTotal() == 0) return;
+   
+   for(int i = PositionsTotal() - 1 ; i >= 0; i-- ){
+      ulong  ticket        = PositionGetTicket(i);
+      string ticket_symbol = PositionGetSymbol(i);
+      
+      if(!MarketOpen(ticket_symbol))
+         continue;
+      
+      //---focus position
+      if(!PositionSelectByTicket(ticket))
+         continue;
+         
+      if(PositionGetDouble(POSITION_PROFIT) > 0){
+         if(trade.PositionClose(ticket)){
+            Print("ClosePositionProfit success");
+         }else{
+            Print("ClosePositionProfit error:",GetLastError());
+         }
+         
+      }
+   
+
+   }
+   
+   
+}
+  
+  
 bool IsTradingSession()
 {
     MqlDateTime dt;
