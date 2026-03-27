@@ -151,7 +151,7 @@ void ClosePositionTotalProfit(){
    if(CloseTotalProfit == 0) return;
    
    // check total position
-   if(PositionsTotal() < 1) return;
+   if(PositionsTotal() < 2) return;
    
    if(AccountInfoDouble(ACCOUNT_EQUITY) > AccountInfoDouble(ACCOUNT_BALANCE)) return;
    
