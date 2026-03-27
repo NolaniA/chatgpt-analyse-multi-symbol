@@ -15,6 +15,7 @@ input double PercentTrailing         = 90;
 input double StartPercentTrailing    = 40;
 input int    OrderHold               = 1;
 input int    CloseProfit             = 1;
+input int    CloseTotalProfit        = 1;
 
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
@@ -45,6 +46,7 @@ void OnTick()
    //---CHECK DATE TIME TRADE
    //if(!IsTradingSession())
    //   return;
+   ClosePositionTotalProfit();
    ClosePositionProfit();
    TrailingStop();
   }
@@ -143,6 +145,42 @@ void  TrailingStop(double StopLoss = 200)
       
      }
   }
+  
+void ClosePositionTotalProfit(){
+   // signal start
+   if(CloseTotalProfit == 0) return;
+   
+   // check total position
+   if(PositionsTotal() < 1) return;
+   
+   if(AccountInfoDouble(ACCOUNT_EQUITY) > AccountInfoDouble(ACCOUNT_BALANCE)) return;
+   
+   for(int i = PositionsTotal() - 1 ; i >= 0; i-- ){
+      ulong  ticket        = PositionGetTicket(i);
+      string ticket_symbol = PositionGetSymbol(i);
+      
+      if(!MarketOpen(ticket_symbol))
+         continue;
+      
+      //---focus position
+      if(!PositionSelectByTicket(ticket))
+         continue;
+         
+      
+      
+      if(trade.PositionClose(ticket)){
+         Print("Close position by total profile success");
+      }else{
+         Print("Close position by total profile error:",GetLastError());
+      }
+         
+      
+         
+      
+   
+
+   }
+}
 
 void ClosePositionProfit(){
    // signal start
