@@ -139,7 +139,7 @@ class MT5AutoTrader:
         lot = float(risk_amount / (sl_distance / point * pip_value))
         lot = lot*100 if self.symbol.endswith("c") else lot
         lot = round(lot, 2)
-        lot = 0.01 if lot <= 0 else lot
+        lot = 0.01 if lot <= 0.01 else lot
 
         print(f"lot by calculate: {lot}")
         print(f"lot by signal: {volume}")
