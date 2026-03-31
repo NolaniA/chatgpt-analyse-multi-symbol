@@ -155,10 +155,10 @@ void ClosePositionTotalProfit(){
    
    double equity  = AccountInfoDouble(ACCOUNT_EQUITY);
    double balance = AccountInfoDouble(ACCOUNT_BALANCE);
+   double total_profit = equity - balance;
+
    
-   bool close = ((equity - balance) > PositionsTotal())? true:false;
-   
-   if(!close) return;
+   if(total_profit < CloseTotalProfit) return;
    
    for(int i = PositionsTotal() - 1 ; i >= 0; i-- ){
       ulong  ticket        = PositionGetTicket(i);
@@ -178,11 +178,6 @@ void ClosePositionTotalProfit(){
       }else{
          Print("Close position by total profile error:",GetLastError());
       }
-         
-      
-         
-      
-   
 
    }
 }
