@@ -153,7 +153,12 @@ void ClosePositionTotalProfit(){
    // check total position
    if(PositionsTotal() < 2) return;
    
-   if(AccountInfoDouble(ACCOUNT_EQUITY) > AccountInfoDouble(ACCOUNT_BALANCE)) return;
+   double equity  = AccountInfoDouble(ACCOUNT_EQUITY);
+   double balance = AccountInfoDouble(ACCOUNT_BALANCE);
+   
+   bool close = ((equity - balance) > PositionsTotal())? true:false;
+   
+   if(!close) return;
    
    for(int i = PositionsTotal() - 1 ; i >= 0; i-- ){
       ulong  ticket        = PositionGetTicket(i);
@@ -200,7 +205,7 @@ void ClosePositionProfit(){
       if(!PositionSelectByTicket(ticket))
          continue;
          
-      if(PositionGetDouble(POSITION_PROFIT) > 0){
+      if(PositionGetDouble(POSITION_PROFIT) > 1){
          if(trade.PositionClose(ticket)){
             Print("ClosePositionProfit success");
          }else{
