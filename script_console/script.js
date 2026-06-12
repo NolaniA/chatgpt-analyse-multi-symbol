@@ -15,7 +15,7 @@
   // click submit
   let sendBtn = null;
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 100; i++) {
     sendBtn = document.querySelector('button[data-testid="send-button"]');
     if (sendBtn) break;
 
@@ -25,16 +25,35 @@
 
   if (!sendBtn) return console.log("not found send button");
   sendBtn.click();
+  console.log('click send');
 
-  // wait result success
-  await new Promise((resolve) => {
-    let interval = setInterval(() => {
-      if (!document.querySelector('button[data-testid="stop-button"]')) {
+  // wait until result is complete
+  await new Promise((resolve, reject) => {
+    console.log('wait result');
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+      reject(new Error("Timeout waiting for result"));
+    }, 10 * 60 * 1000); // 10 minutes
+
+    const interval = setInterval(() => {
+      const stopButton = document.querySelector('button[data-testid="stop-button"]');
+
+      if (!stopButton) {
         clearInterval(interval);
+        clearTimeout(timeout);
         resolve();
       }
-    }, 1000);
+    }, 500);
   });
+  // wait result success
+  //await new Promise((resolve) => {
+    //let interval = setInterval(() => {
+      //if (!document.querySelector('button[data-testid="stop-button"]')) {
+        //clearInterval(interval);
+        //resolve();
+      //}
+    //}, 50000);
+  //});
 
 
   sleep(1000);
@@ -49,10 +68,10 @@
   let preCode = null;
 
   for (let i = 1; i <= 10; i++) {
-    preCode = document.querySelector('div#code-block-viewer div.cm-content');
+    preCode = document.querySelector('div#code-block-viewer div.cm-scroller pre.cm-content');
     if (preCode) break;
 
-    console.log(`รอบที่ ${i} ยังไม่เจอ รอต่อ...`);
+    console.log(`รอบที่ ${i} ยังไม่เจอcode block รอต่อ...`);
     await new Promise(r => setTimeout(r, 500));
   }
 
