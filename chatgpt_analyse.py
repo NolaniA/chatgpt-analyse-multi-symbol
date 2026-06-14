@@ -255,6 +255,7 @@ class ChatGPTUploader:
             self.allow_console_pasting()
             self.run_helper_js()
             self.run_script_js()
+            self._sleep(30)
             self.wait_until_done_in_address_bar()
             self.close_tab()
             self.move_file_result()
